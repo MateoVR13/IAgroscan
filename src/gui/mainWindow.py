@@ -1,14 +1,15 @@
 import customtkinter
 from PIL import Image
+from simpleDetection import simpleDetection
 
-class App(customtkinter.CTk):
+class mainWindow(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         
         #Window Setup
-        self.geometry("800x700")
-        self.title("IAgroscan")
-        self.wm_iconbitmap("data/Scanner.ico")
+        self.geometry("800x700+550+175")
+        self.title("IAgroscan | Menú Principal")
+        self.wm_iconbitmap("data/scanner.ico")
         customtkinter.set_appearance_mode("Dark")
         customtkinter.set_default_color_theme("green")
         
@@ -30,8 +31,8 @@ class App(customtkinter.CTk):
         
         #Logo Setup
         logo = customtkinter.CTkImage(
-            light_image=Image.open("data/IAgroscanP.png"),
-            dark_image=Image.open("data/IAgroscanP.png"),
+            light_image=Image.open("data/iagroscan_logo.png"),
+            dark_image=Image.open("data/iagroscan_logo.png"),
             size=(200, 39),
         )
         self.labelImg = customtkinter.CTkLabel(self.sidebar_frame, image=logo, text="")
@@ -58,7 +59,6 @@ class App(customtkinter.CTk):
         self.scaling_optionemenu.grid(row=15, column=0, padx=20, pady=(10, 20))
         
         #Center Frame Components
-        
         my_image = customtkinter.CTkImage(light_image=Image.open("data/defaultPicture.png"),
                                   dark_image=Image.open("data/defaultPicture.png"),
                                   size=(250, 250))
@@ -75,8 +75,8 @@ class App(customtkinter.CTk):
         self.labelTextSugg.tag_add("justificado", "1.0", "end")
         self.labelTextSugg.grid(row=6, column=10)
         
-        self.uploadButton = customtkinter.CTkButton(self.center_frame, width=120, text="Cargar Imagen")
-        self.uploadButton.grid(row=6, column=10)
+        self.openDetection = customtkinter.CTkButton(self.center_frame, command=self.start_detection_command, width=120, text="Comenzar Detección Simple")
+        self.openDetection.grid(row=6, column=10)
 
 
 
@@ -90,7 +90,14 @@ class App(customtkinter.CTk):
 
     def sidebar_button_event(self):
         print("sidebar_button click")
+        
+    def start_detection_command(self):
+        
+        simple_detection_window = simpleDetection()
+        simple_detection_window.mainloop()
+        self.destroy()
+        
 
-
-app = App()
+        
+app = mainWindow()
 app.mainloop()
