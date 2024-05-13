@@ -6,7 +6,7 @@ class App(customtkinter.CTk):
         super().__init__()
         self.geometry("1200x700")
         self.title("IAgroscan")
-        self.wm_iconbitmap("Scanner.ico")
+        self.wm_iconbitmap("data/Scanner.ico")
         customtkinter.set_appearance_mode("Dark")
         customtkinter.set_default_color_theme("green")
         
@@ -19,8 +19,8 @@ class App(customtkinter.CTk):
         self.sidebar_frame.grid_rowconfigure(4, weight=1)
         
         logo = customtkinter.CTkImage(
-            light_image=Image.open("IAgroscanP.png"),
-            dark_image=Image.open("IAgroscanP.png"),
+            light_image=Image.open("data/IAgroscanP.png"),
+            dark_image=Image.open("data/IAgroscanP.png"),
             size=(200, 39),
         )
         
