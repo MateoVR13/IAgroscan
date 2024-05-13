@@ -6,20 +6,27 @@ class App(customtkinter.CTk):
         super().__init__()
         
         #Window Setup
-        self.geometry("1200x700")
+        self.geometry("800x700")
         self.title("IAgroscan")
         self.wm_iconbitmap("data/Scanner.ico")
         customtkinter.set_appearance_mode("Dark")
         customtkinter.set_default_color_theme("green")
         
         #Grid Configuration
-        self.grid_columnconfigure((1,2,3), weight=1)
-        self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.grid_columnconfigure((1), weight=1)
+        self.grid_columnconfigure(2, weight=0)
+        self.grid_rowconfigure((0, 1), weight=1)
         
         #Sidebar Configuration
         self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=25)
         self.sidebar_frame.grid(row=0, column=0, padx=10, pady=10, rowspan=4, sticky="nswe")
         self.sidebar_frame.grid_rowconfigure(10, weight=1)
+        
+        #Center Frame Configuration
+        self.center_frame = customtkinter.CTkFrame(self, width=350, corner_radius=25)
+        self.center_frame.grid(row=0, column=1, padx=10, pady=10, rowspan=4, sticky="nswe")
+        self.center_frame.grid_rowconfigure(20, weight=1)
+        self.center_frame.grid_columnconfigure(10, weight=1)
         
         #Logo Setup
         logo = customtkinter.CTkImage(
@@ -43,26 +50,35 @@ class App(customtkinter.CTk):
         self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame, command=self.sidebar_button_event, text="Estadísticas",fg_color="gray25")
         self.sidebar_button_4.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
         
-        self.main_button_1 = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"))
-        self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
-
-
-        self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
+        #Scaling Setup
+        self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="Tamaño de la Interfaz:", anchor="w")
         self.scaling_label.grid(row=14, column=0, padx=20, pady=(10, 0))
         self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["80%", "90%", "100%", "110%", "120%"],
-                                                               command=self.change_scaling_event)
+                                                               command=self.change_scaling_event, fg_color="gray25")
         self.scaling_optionemenu.grid(row=15, column=0, padx=20, pady=(10, 20))
-
-
-
-        # Create textbox
-        self.textbox = customtkinter.CTkTextbox(self, width=400)
-        # self.textbox.insert("0.0", """IAgroscan es una herramienta de detección y diagnostico de enfermedades de plantas agrícolas del departamento del Meta. Esta funciona haciendo uso de algoritmos de deep learning y modelos de detección propios, que brindan rapidez y precisión en las predicciónes.\n""")
-        # self.textbox.tag_config("justificado", justify='left', wrap='word')
-        # self.textbox.tag_add("justificado", "1.0", "end")
-        self.textbox.grid(row=0, column=1, padx=(10, 10), pady=(10, 0), sticky="nsew")
         
-            
+        #Center Frame Components
+        
+        my_image = customtkinter.CTkImage(light_image=Image.open("data/defaultPicture.png"),
+                                  dark_image=Image.open("data/defaultPicture.png"),
+                                  size=(250, 250))
+        
+        self.detectedImage = customtkinter.CTkLabel(self.center_frame, image=my_image,width=250, height=250, text="", corner_radius=25)
+        self.detectedImage.grid(row=4, column=10, padx=20, pady=(100, 10))
+        
+        self.labelSuggestions = customtkinter.CTkLabel(self.center_frame, text="Recomendaciones", font=customtkinter.CTkFont(family="Google Sans Regular", size=17))
+        self.labelSuggestions.grid(row=5, column=10, padx=20, pady=(10,0))
+        
+        self.labelTextSugg = customtkinter.CTkTextbox(self.center_frame, width=450,fg_color="transparent")
+        self.labelTextSugg.insert("0.0", """Para obtener mejores resultados es recomendable enfocar la enfermedad de la hoja en el centro de la imagen y usar una relación de aspecto 1:1.\n""")
+        self.labelTextSugg.tag_config("justificado", justify='center', wrap='word')
+        self.labelTextSugg.tag_add("justificado", "1.0", "end")
+        self.labelTextSugg.grid(row=6, column=10)
+        
+        self.uploadButton = customtkinter.CTkButton(self.center_frame, width=120, text="Cargar Imagen")
+        self.uploadButton.grid(row=6, column=10)
+
+
 
     def open_input_dialog_event(self):
         dialog = customtkinter.CTkInputDialog(text="Type in a number:", title="CTkInputDialog")
