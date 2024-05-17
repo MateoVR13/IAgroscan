@@ -5,6 +5,25 @@ from tkinter import filedialog
 from ultralytics import YOLO
 import time, os
 
+
+class ToplevelWindow(customtkinter.CTkToplevel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.geometry("500x230+550+175")
+        self.title("IAgroscan | Batch Detection")
+        self.wm_iconbitmap("data/scanner.ico")
+
+        self.label_deteccion = customtkinter.CTkLabel(self, text="Detección en Lote Exitosa!", font=customtkinter.CTkFont(family="Google Sans Medium", size=17))
+        self.label_deteccion.pack(padx=20, pady=20)
+        
+        self.label_deteccion2 = customtkinter.CTkLabel(self, text="Detecciones Guardadas en: ", font=customtkinter.CTkFont(family="Google Sans Medium", size=15))
+        self.label_deteccion2.pack(padx=20, pady=20)
+        
+        self.label_ruta = customtkinter.CTkLabel(self, text=rutaCarpeta, font=customtkinter.CTkFont(family="JetBrains Mono", size=12))
+        self.label_ruta.pack(padx=20, pady=20)
+
+
+
 class mainWindow(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -69,7 +88,7 @@ class mainWindow(customtkinter.CTk):
         self.detectedImage = customtkinter.CTkLabel(self.center_frame, image=my_image,width=250, height=250, text="", corner_radius=25)
         self.detectedImage.grid(row=4, column=10, padx=20, pady=(100, 10))
         
-        self.labelSuggestions = customtkinter.CTkLabel(self.center_frame, text="Recomendación", font=customtkinter.CTkFont(family="Google Sans Regular", size=17))
+        self.labelSuggestions = customtkinter.CTkLabel(self.center_frame, text="Recomendación", font=customtkinter.CTkFont(family="Google Sans Medium", size=17))
         self.labelSuggestions.grid(row=5, column=10, padx=20, pady=(10,0))
         
         self.labelTextSugg = customtkinter.CTkTextbox(self.center_frame, width=450,fg_color="transparent")
@@ -81,6 +100,7 @@ class mainWindow(customtkinter.CTk):
         self.openDetection = customtkinter.CTkButton(self.center_frame, command=self.select_image, width=120, text="Comenzar Detección Simple")
         self.openDetection.grid(row=6, column=10)
 
+        self.toplevel_window = None
 
 
     def open_input_dialog_event(self):
@@ -99,11 +119,17 @@ class mainWindow(customtkinter.CTk):
         simple_detection_window = simpleDetection()
         simple_detection_window.mainloop()
         
+    def open_toplevel(self):
+        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+            self.toplevel_window = ToplevelWindow(self)
+        else:
+            self.toplevel_window.focus()
+        
     def select_image(self):
     
         file_path = filedialog.askopenfilename()
         
-        model = YOLO('models/modelV3.pt')
+        model = YOLO('models/modelV2.pt')
         results = model(file_path)
 
 
@@ -123,6 +149,12 @@ class mainWindow(customtkinter.CTk):
             timestamp = int(time.time() * 1000)
             result_filename = os.path.join(folder_path, f'result_{timestamp}_{i}.jpg')
             result.save(filename=result_filename)
+            
+        global rutaCarpeta
+        rutaCarpeta = str(folder_path)    
+        self.open_toplevel()
+
+        # dialog = customtkinter.CTkInputDialog(text="Las imágenes se han guardado en la ruta:", title="Detección el Lote Exitosa!")
 
         
 app = mainWindow()
