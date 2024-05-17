@@ -48,11 +48,11 @@ class mainWindow(customtkinter.CTk):
         self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame, command=self.select_batch, text="Detección en Lote",fg_color="gray25")
         self.sidebar_button_2.grid(row=3, column=0, padx=20, pady=10, sticky="ew")
         
-        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame, command=self.sidebar_button_event, text="Informes",fg_color="gray25")
-        self.sidebar_button_3.grid(row=5, column=0, padx=20, pady=10, sticky="ew")
+        # self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame, command=self.sidebar_button_event, text="Informes",fg_color="gray25")
+        # self.sidebar_button_3.grid(row=5, column=0, padx=20, pady=10, sticky="ew")
         
-        self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame, command=self.sidebar_button_event, text="Estadísticas",fg_color="gray25")
-        self.sidebar_button_4.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
+        # self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame, command=self.sidebar_button_event, text="Estadísticas",fg_color="gray25")
+        # self.sidebar_button_4.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
         
 
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="Tamaño de la Interfaz:", anchor="w")
