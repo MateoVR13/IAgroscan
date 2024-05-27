@@ -3,8 +3,14 @@ from PIL import Image
 from tkinter import filedialog
 from ultralytics import YOLO
 import os, time
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+import textwrap
+import matplotlib.pyplot as plt
+from openai import OpenAI
 
 model = YOLO('models/modelV3.pt')
+
 
 class ToplevelWindow(customtkinter.CTkToplevel):
     def __init__(self, parent, *args, **kwargs):
@@ -184,48 +190,124 @@ class mainWindow(customtkinter.CTk):
             self.toplevel_window.focus()
 
     def select_batch(self):
-        
         folder_path = filedialog.askdirectory()
         results = model(folder_path)
         num_images_detected = len(results)
         print(f"Número de imágenes detectadas: {num_images_detected}")
 
+        # Diccionario para contar las detecciones por clase
+        detections_count = {i: 0 for i in range(11)}
+        class_names = {
+            0: 'cana_amarillo', 1: 'cana_puntorojo', 2: 'cana_sano', 3: 'maiz_manchagris', 
+            4: 'maiz_roya', 5: 'maiz_sano', 6: 'maiz_tizon', 7: 'platano_cordana', 
+            8: 'platano_pestalotiopsis', 9: 'platano_sano', 10: 'platano_sigatoka'
+        }
+
         for i, result in enumerate(results):
             timestamp = int(time.time() * 1000)
             result_filename = os.path.join(folder_path, f'result_{timestamp}_{i}.jpg')
             result.save(filename=result_filename)
-            
+
             for detection in result.boxes:
                 class_id = int(detection.cls)
-                
-                if class_id == 0:
-                    print("Clase 0 detectada: Acción correspondiente")
-                elif class_id == 1:
-                    print("Clase 1 detectada: Acción correspondiente")
-                elif class_id == 2:
-                    print("Clase 2 detectada: Acción correspondiente")
-                elif class_id == 3:
-                    print("Clase 3 detectada: Acción correspondiente")
-                elif class_id == 4:
-                    print("Clase 4 detectada: Acción correspondiente")
-                elif class_id == 5:
-                    print("Clase 5 detectada: Acción correspondiente")
-                elif class_id == 6:
-                    print("Clase 6 detectada: Acción correspondiente")
-                elif class_id == 7:
-                    print("Clase 7 detectada: Acción correspondiente")
-                elif class_id == 8:
-                    print("Clase 8 detectada: Acción correspondiente")
-                elif class_id == 9:
-                    print("Clase 9 detectada: Acción correspondiente")
-                elif class_id == 10:
-                    print("Clase 10 detectada: Acción correspondiente")
+                if class_id in detections_count:
+                    detections_count[class_id] += 1
                 else:
                     print(f"Clase desconocida detectada: {class_id}")
+
+
+        detected_classes = {class_names[class_id]: count for class_id, count in detections_count.items() if count > 0}
+        total_unique_classes_detected = len(detected_classes)
+        total_classes_not_detected = 11 - total_unique_classes_detected
+        detection_effectiveness = (num_images_detected / (num_images_detected + total_classes_not_detected)) * 100
+
+        print(f"Total de clases detectadas (sin repetir): {total_unique_classes_detected}")
+        print("Conteo de detecciones por clase:")
+        for class_name, count in detected_classes.items():
+            print(f"{class_name}: {count}")
+
+        report_filename = os.path.join(folder_path, 'reporte_deteccion.pdf')
+        c = canvas.Canvas(report_filename, pagesize=A4)
+        width, height = A4
+
+        c.setFont("Helvetica-Bold", 16)
+        c.drawString(200, height - 60, "Reporte de Detección")
+
+        c.setFont("Helvetica-Bold", 12)
+        c.drawString(50, height - 120, "")
+
+        c.drawString(50, height - 140, f"No. Detecciones ------------------------------------------------------------------------------------- {num_images_detected}")
+        c.drawString(50, height - 160, f"No. Clases Detectadas ---------------------------------------------------------------------------- {total_unique_classes_detected}")
+        c.drawString(50, height - 180, f"No. de No Detectadas ----------------------------------------------------------------------------- {total_classes_not_detected}")
+        c.drawString(50, height - 200, f"Efectividad de Detección -------------------------------------------------------------------------- {detection_effectiveness:.2f}%")
+
+
+        api_key = ""
+        client = OpenAI(api_key=api_key)
+
+        diseases_detected = ", ".join(detected_classes.keys())
+        prompt = f"""Mi modelo de IA de detección de patologías ha detectado estas enfermedades ({diseases_detected}) 
+        Cana amarillo corresponde al hongo Mycovellosiella koepkei, cana punto rojo corresponde a red rot, manchagris es 
+        gray leaf spot, roya es roya, tizon es leaf blight, cordana, pestalotiopsis y sigatoka son hongos del platano.
+        Necesito que recomiendes tratamientos, procedimientos a seguir, la peligrosidad y como prevenirlos. Hazlo de
+        manera técnica y haciendo saltos de línea cada 60 caracteres. No concluyas al final organiza el texto a manera
+        de informe."""
+
+        chat_completion = client.chat.completions.create(
+            messages=[{"role": "user", "content": prompt}],
+            model="gpt-3.5-turbo",
+        )
+        recommendations = chat_completion.choices[0].message.content
+
+
+        c.drawString(50, height - 240, "Recomendaciones")
+        c.setFont("Helvetica", 11)
+
+        wrapped_text = textwrap.wrap(recommendations, width=95)
+        y_pos = height - 260
         
+        for line in wrapped_text:
+            c.drawString(50, y_pos, line)
+            y_pos -= 15
+
+
+        c.showPage()
+
+        labels = list(detected_classes.keys())
+        sizes = list(detected_classes.values())
+
+        # Pie chart
+        fig, ax = plt.subplots()
+        ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+        plt.title('Distribución de Detecciones por Clase')
+        plt.axis('equal')
+        pie_chart_path = os.path.join(folder_path, 'pie_chart.png')
+        plt.savefig(pie_chart_path)
+        plt.close()
+
+        # Barchart
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.bar(labels, sizes, color='skyblue')
+        plt.title('Conteo de Detecciones por Clase')
+        plt.xlabel('Clases')
+        plt.ylabel('Cantidad de Detecciones')
+        plt.xticks(rotation=90)
+        plt.tight_layout()
+        bar_chart_path = os.path.join(folder_path, 'bar_chart.png')
+        plt.savefig(bar_chart_path)
+        plt.close()
+ 
+        chart_width = 500
+
+        c.drawImage(pie_chart_path, 50, 400, width=chart_width, preserveAspectRatio=True, mask='auto')
+        c.drawImage(bar_chart_path, 50, -40, width=chart_width, preserveAspectRatio=True, mask='auto')
+
+        c.save()
+
         global rutaCarpeta
         rutaCarpeta = str(folder_path)
         self.open_toplevel()
+
 
 app = mainWindow()
 app.mainloop()
