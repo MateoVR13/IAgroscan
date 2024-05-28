@@ -1,13 +1,14 @@
-import customtkinter
+import customtkinter, pymysql
 from PIL import Image
 from tkinter import filedialog
 from ultralytics import YOLO
-import os, time
+import os, time, datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 import textwrap
 import matplotlib.pyplot as plt
 from openai import OpenAI
+from connection import get_connection
 
 model = YOLO('models/modelV3.pt')
 
@@ -74,10 +75,6 @@ class mainWindow(customtkinter.CTk):
         img5 = Image.open("data/icons/bar_chartw.png")
         img6 = Image.open("data/icons/bar_chartg.png")
         
-        img7 = Image.open("data/icons/reportw.png")
-        img8 = Image.open("data/icons/reportg.png")
-        
-
         self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, command=self.select_image, 
                                                         text="Detección Simple", fg_color="transparent",
                                                         height=60, text_color="white",
@@ -225,6 +222,35 @@ class mainWindow(customtkinter.CTk):
         print("Conteo de detecciones por clase:")
         for class_name, count in detected_classes.items():
             print(f"{class_name}: {count}")
+            
+         
+        
+        connection = get_connection()
+        if connection is None:
+            print("Error: No se pudo conectar a la base de datos.")
+            return
+
+        try:
+            with connection.cursor() as cursor:
+                
+                timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                
+                sql_detections = "INSERT INTO detections (timestamp, num_images, num_patologias) VALUES (%s, %s, %s)"
+                cursor.execute(sql_detections, (timestamp, num_images_detected, total_unique_classes_detected))
+                detection_id = cursor.lastrowid
+
+                
+                for class_name, count in detected_classes.items():
+                    sql_details = "INSERT INTO detection_details (detection_id, class_name, count) VALUES (%s, %s, %s)"
+                    cursor.execute(sql_details, (detection_id, class_name, count))
+
+            connection.commit()
+            print("Datos insertados correctamente en la base de datos.")
+        except pymysql.Error as e:
+            print(f"Error al insertar datos en la base de datos: {e}")
+        finally:
+            connection.close()    
+            
 
         report_filename = os.path.join(folder_path, 'reporte_deteccion.pdf')
         c = canvas.Canvas(report_filename, pagesize=A4)
