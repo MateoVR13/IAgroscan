@@ -1,14 +1,17 @@
-import customtkinter, pymysql
+import customtkinter
+import pymysql
 from PIL import Image
 from tkinter import filedialog
 from ultralytics import YOLO
-import os, time, datetime
+import os
+import time
+import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import textwrap
 import matplotlib.pyplot as plt
 from openai import OpenAI
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from connection import get_connection
 
 model = YOLO('models/modelV3.pt')
@@ -33,6 +36,7 @@ class ToplevelWindow(customtkinter.CTkToplevel):
         self.attributes('-topmost', True)
         self.lift()
 
+
 class mainWindow(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -42,6 +46,8 @@ class mainWindow(customtkinter.CTk):
         self.title("IAgroscan | Menú Principal")
         self.wm_iconbitmap("data/imgs/Scanner.ico")
 
+        customtkinter.set_default_color_theme("blue")
+        
         self.grid_columnconfigure((1), weight=1)
         self.grid_columnconfigure(2, weight=0)
         self.grid_rowconfigure((0, 1), weight=1)
@@ -51,7 +57,7 @@ class mainWindow(customtkinter.CTk):
         self.sidebar_frame.grid_rowconfigure(10, weight=1)
         
         self.center_frame = customtkinter.CTkFrame(self, width=350, corner_radius=25)
-        self.center_frame.grid(row=0, column=1, padx=(0,10), pady=10, rowspan=4, sticky="nswe")
+        self.center_frame.grid(row=0, column=1, padx=(0, 10), pady=10, rowspan=4, sticky="nswe")
         self.center_frame.grid_rowconfigure(2, weight=1)
         self.center_frame.grid_columnconfigure(2, weight=1)
         
@@ -78,20 +84,18 @@ class mainWindow(customtkinter.CTk):
                                                         height=60, text_color="white",
                                                         corner_radius=15, anchor="w",
                                                         font=("Google Sans Medium", 18),
-                                                        image= customtkinter.CTkImage(dark_image=img, light_image=img))
+                                                        image=customtkinter.CTkImage(dark_image=img, light_image=img))
         
-
         def on_hover(event):
             self.sidebar_button_1.configure(text_color="sea green")
             self.sidebar_button_1.configure(fg_color="white")
-            self.sidebar_button_1.configure(image= customtkinter.CTkImage(dark_image=img2, light_image=img2))
+            self.sidebar_button_1.configure(image=customtkinter.CTkImage(dark_image=img2, light_image=img2))
             
         def off_hover(event):
             self.sidebar_button_1.configure(text_color="white")
             self.sidebar_button_1.configure(fg_color="transparent")
-            self.sidebar_button_1.configure(image= customtkinter.CTkImage(dark_image=img, light_image=img))
+            self.sidebar_button_1.configure(image=customtkinter.CTkImage(dark_image=img, light_image=img))
             
-
         self.sidebar_button_1.bind("<Enter>", on_hover)
         self.sidebar_button_1.bind("<Leave>", off_hover)
         self.sidebar_button_1.grid(row=2, column=0, padx=20, pady=10, sticky="ew")
@@ -101,17 +105,17 @@ class mainWindow(customtkinter.CTk):
                                                         height=60, text_color="white",
                                                         corner_radius=15, anchor="w",
                                                         font=("Google Sans Medium", 18),
-                                                        image= customtkinter.CTkImage(dark_image=img, light_image=img))
+                                                        image=customtkinter.CTkImage(dark_image=img, light_image=img))
         
         def on_hover(event):
             self.sidebar_button_2.configure(text_color="sea green")
             self.sidebar_button_2.configure(fg_color="white")
-            self.sidebar_button_2.configure(image= customtkinter.CTkImage(dark_image=img2, light_image=img2))
+            self.sidebar_button_2.configure(image=customtkinter.CTkImage(dark_image=img2, light_image=img2))
             
         def off_hover(event):
             self.sidebar_button_2.configure(text_color="white")
             self.sidebar_button_2.configure(fg_color="transparent")
-            self.sidebar_button_2.configure(image= customtkinter.CTkImage(dark_image=img, light_image=img))
+            self.sidebar_button_2.configure(image=customtkinter.CTkImage(dark_image=img, light_image=img))
             
         self.sidebar_button_2.bind("<Enter>", on_hover)
         self.sidebar_button_2.bind("<Leave>", off_hover)
@@ -122,17 +126,17 @@ class mainWindow(customtkinter.CTk):
                                                         height=60, text_color="white",
                                                         corner_radius=15, anchor="w",
                                                         font=("Google Sans Medium", 18),
-                                                        image= customtkinter.CTkImage(dark_image=img3, light_image=img3))
+                                                        image=customtkinter.CTkImage(dark_image=img3, light_image=img3))
         
         def on_hover(event):
             self.sidebar_button_3.configure(text_color="sea green")
             self.sidebar_button_3.configure(fg_color="white")
-            self.sidebar_button_3.configure(image= customtkinter.CTkImage(dark_image=img4, light_image=img4))
+            self.sidebar_button_3.configure(image=customtkinter.CTkImage(dark_image=img4, light_image=img4))
             
         def off_hover(event):
             self.sidebar_button_3.configure(text_color="white")
             self.sidebar_button_3.configure(fg_color="transparent")
-            self.sidebar_button_3.configure(image= customtkinter.CTkImage(dark_image=img3, light_image=img3))
+            self.sidebar_button_3.configure(image=customtkinter.CTkImage(dark_image=img3, light_image=img3))
             
         self.sidebar_button_3.bind("<Enter>", on_hover)
         self.sidebar_button_3.bind("<Leave>", off_hover)
@@ -143,17 +147,17 @@ class mainWindow(customtkinter.CTk):
                                                         height=60, text_color="white",
                                                         corner_radius=15, anchor="w",
                                                         font=("Google Sans Medium", 18),
-                                                        image= customtkinter.CTkImage(dark_image=img5, light_image=img5))
+                                                        image=customtkinter.CTkImage(dark_image=img5, light_image=img5))
         
         def on_hover(event):
             self.sidebar_button_4.configure(text_color="sea green")
             self.sidebar_button_4.configure(fg_color="white")
-            self.sidebar_button_4.configure(image= customtkinter.CTkImage(dark_image=img6, light_image=img6))
+            self.sidebar_button_4.configure(image=customtkinter.CTkImage(dark_image=img6, light_image=img6))
             
         def off_hover(event):
             self.sidebar_button_4.configure(text_color="white")
             self.sidebar_button_4.configure(fg_color="transparent")
-            self.sidebar_button_4.configure(image= customtkinter.CTkImage(dark_image=img5, light_image=img5))
+            self.sidebar_button_4.configure(image=customtkinter.CTkImage(dark_image=img5, light_image=img5))
             
         self.sidebar_button_4.bind("<Enter>", on_hover)
         self.sidebar_button_4.bind("<Leave>", off_hover)
@@ -350,8 +354,7 @@ class mainWindow(customtkinter.CTk):
             for j, value in enumerate(detection):
                 label = customtkinter.CTkLabel(table_frame, text=value, font=("Arial", 12), text_color="white")
                 label.grid(row=i+1, column=j, padx=5, pady=5)
-                
-                
+                    
     def load_charts(self):
         for widget in self.center_frame.winfo_children():
             widget.destroy()
@@ -373,6 +376,8 @@ class mainWindow(customtkinter.CTk):
         ax1.pie(counts, labels=class_names, autopct='%1.1f%%', startangle=45, labeldistance=1, textprops={'fontsize': 8})
         ax1.axis('equal')
         ax1.set_title("Distribución General por Enfermedades")
+
+
         pie_chart = FigureCanvasTkAgg(fig1, master=self.center_frame)
         pie_chart.get_tk_widget().grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
@@ -382,10 +387,13 @@ class mainWindow(customtkinter.CTk):
         ax2.set_title('Distribución de Enfermedades')
         ax2.set_xlabel('Enfermedades')
         ax2.set_ylabel('Conteo')
+        
         plt.xticks(rotation=45, ha='right', fontsize=8)
+
         hist_chart = FigureCanvasTkAgg(fig2, master=self.center_frame)
         hist_chart.get_tk_widget().grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
 
 
-app = mainWindow()
-app.mainloop()
+if __name__ == "__main__":
+    app = mainWindow()
+    app.mainloop()
