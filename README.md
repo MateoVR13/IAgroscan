@@ -43,8 +43,8 @@ IAgroscan is built with:
 
 - The YOLO model was trained on a custom dataset of agricultural plant diseases
 - Special thanks to agricultural specialists who provided expertise for the training data, all the links are shown below:
-    https://www.kaggle.com/datasets/shubham2703/five-crop-diseases-dataset
-    https://www.kaggle.com/datasets/kamal01/top-agriculture-crop-disease
-    https://www.kaggle.com/datasets/nirmalsankalana/sugarcane-leaf-disease-dataset
-    https://www.kaggle.com/datasets/kaiwenhuuu/sugarcane-leaf-disease-dataset
-    https://www.kaggle.com/datasets/roshitab/sugarcane-leaf-disease-dataset
+    - https://www.kaggle.com/datasets/shubham2703/five-crop-diseases-dataset
+    - https://www.kaggle.com/datasets/kamal01/top-agriculture-crop-disease
+    - https://www.kaggle.com/datasets/nirmalsankalana/sugarcane-leaf-disease-dataset
+    - https://www.kaggle.com/datasets/kaiwenhuuu/sugarcane-leaf-disease-dataset
+    - https://www.kaggle.com/datasets/roshitab/sugarcane-leaf-disease-dataset
