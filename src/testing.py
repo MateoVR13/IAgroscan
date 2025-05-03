@@ -263,7 +263,7 @@ class mainWindow(customtkinter.CTk):
         c.drawString(50, height - 200, f"Efectividad de Detección -------------------------------------------------------------------------- {detection_effectiveness:.2f}%")
 
 
-        api_key = "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"
+        api_key = ""
         client = OpenAI(api_key=api_key)
 
         diseases_detected = ", ".join(detected_classes.keys())
