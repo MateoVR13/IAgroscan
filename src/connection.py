@@ -3,10 +3,10 @@ import pymysql
 def get_connection():
     try:
         connection = pymysql.connect(
-            host='localhost',
-            user='root',
-            password='840862_Mv',
-            database='iagroscan'
+            host='',
+            user='',
+            password='',
+            database=''
         )
         return connection
     except pymysql.Error as e:
