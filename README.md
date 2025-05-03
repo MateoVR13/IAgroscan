@@ -70,8 +70,11 @@ IAgroscan is built with:
 1. **Select an image** or folder of images containing plant specimens
 2. **AI model processes** the images to detect diseases
 3. **Review results** displayed directly in the application
-4. **Generate reports** with detection statistics and treatment recommendations
-5. **Track disease patterns** over time with the built-in database
+
+![Picture](https://github.com/user-attachments/assets/b0a3e4af-805a-42cc-809b-f8688f0e1e9b)
+
+5. **Generate reports** with detection statistics and treatment recommendations
+6. **Track disease patterns** over time with the built-in database
 
 ## 📝 License
 
