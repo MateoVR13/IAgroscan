@@ -28,43 +28,6 @@ IAgroscan is built with:
 - **Matplotlib**: For statistical visualization of detection results
 - **PyMySQL**: For database management of detection records
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Python 3.8+
-- Required packages:
-  ```
-  customtkinter
-  pymysql
-  pillow
-  ultralytics
-  reportlab
-  matplotlib
-  openai
-  ```
-
-### Installation
-
-1. Clone the repository:
-   ```
-   git clone https://github.com/MateoVR13/IAgroscan.git
-   ```
-
-2. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-
-3. Set up your database connection in `connection.py`
-
-4. Add your OpenAI API key in the appropriate section of the code
-
-5. Run the application:
-   ```
-   python mainWindow.py
-   ```
-
 ## 📊 How It Works
 
 1. **Select an image** or folder of images containing plant specimens
@@ -76,11 +39,12 @@ IAgroscan is built with:
 5. **Generate reports** with detection statistics and treatment recommendations
 6. **Track disease patterns** over time with the built-in database
 
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 🙏 Acknowledgments
 
 - The YOLO model was trained on a custom dataset of agricultural plant diseases
-- Special thanks to agricultural specialists who provided expertise for the training data
+- Special thanks to agricultural specialists who provided expertise for the training data, all the links are shown below:
+    https://www.kaggle.com/datasets/shubham2703/five-crop-diseases-dataset
+    https://www.kaggle.com/datasets/kamal01/top-agriculture-crop-disease
+    https://www.kaggle.com/datasets/nirmalsankalana/sugarcane-leaf-disease-dataset
+    https://www.kaggle.com/datasets/kaiwenhuuu/sugarcane-leaf-disease-dataset
+    https://www.kaggle.com/datasets/roshitab/sugarcane-leaf-disease-dataset
