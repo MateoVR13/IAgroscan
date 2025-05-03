@@ -36,7 +36,7 @@ IAgroscan is built with:
 5. **Generate reports** with detection statistics and treatment recommendations
 6. **Track disease patterns** over time with the built-in database
 
-## Captures
+## 📷 Captures
 <p align="center">
   <img src="https://github.com/user-attachments/assets/5106615b-66e7-44db-b802-c155a316b473" alt="GUI"/>
   <img src="https://github.com/user-attachments/assets/b0a3e4af-805a-42cc-809b-f8688f0e1e9b" alt="Multiple Detections 1"/>
