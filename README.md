@@ -38,9 +38,9 @@ IAgroscan is built with:
 
 ## Captures
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/5106615b-66e7-44db-b802-c155a316b473" alt="GUI" width="300"/>
-  <img src="https://github.com/user-attachments/assets/b0a3e4af-805a-42cc-809b-f8688f0e1e9b" alt="Multiple Detections 1" width="300"/>
-  <img src="https://github.com/user-attachments/assets/7f34a6ee-778b-4202-9676-37f5f8244cd8" alt="Multiple Detections 2" width="300"/>
+  <img src="https://github.com/user-attachments/assets/5106615b-66e7-44db-b802-c155a316b473" alt="GUI"/>
+  <img src="https://github.com/user-attachments/assets/b0a3e4af-805a-42cc-809b-f8688f0e1e9b" alt="Multiple Detections 1"/>
+  <img src="https://github.com/user-attachments/assets/7f34a6ee-778b-4202-9676-37f5f8244cd8" alt="Multiple Detections 2"/>
 </p>
 
 ## 🙏 Acknowledgments
